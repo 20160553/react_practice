@@ -145,3 +145,83 @@ function CoreConcept({img, title, description}) {
   );
 }
 ```
+
+
+## CSS 
+
+`import 'css 위치'`를 이용하면, css 파일에 선언된 스타일을 적용할 수 있다.
+
+단 이때, 주의할 점은 css의 스타일은 해당 css 파일을 임포트한 파일 외에도 적용된다는 점이다.
+
+예를들어, `Header.jsx`에서만 `Header.css` 파일을 임포트했더라도, 다른 파일에서 header 태그를 사용할 때, `Header.css`의 스타일이 적용된다.
+
+
+## children props
+
+`props`는 항상 `children` 속성을 포함한다.
+
+`props.children`은 태그 사이의 입력되는 값으로서, 다양한 타입이 들어갈 수 있다.
+
+
+## 이벤트 리스너
+
+```
+    document.querySelector('button').addEventListener('click', () => {
+
+    })
+```
+
+위 코드와 같이 버튼에 이벤트 리스너를 추가할 수 있지만, 해당 방식을 이용하면 쓸데 없이 코드가 너무 길어지는 문제가 발생한다.
+
+이를 해결하기 위해, 특정 이벤트 리스너는 리액트에 미리 선언되어 있다. 
+
+다음은 리액트에서 버튼의 클릭 리스너를 구현하는 방법이다.
+
+```
+
+export default function TabButton({ children }) {
+    function handleClick() {
+        console.log('click');
+    }
+
+    return (
+        <li>
+            <button onClick={handleClick}>{children}</button>
+        </li>
+    );
+}
+```
+
+위 코드에서는 리액트에서 제공하는 `onClick` 이벤트를 사용하고 있다.
+
+해당 이벤트는 태그를 클릭했을 때 발생하는 이벤트이며, 해당 속성에 `onClick={함수명}`과 같이 클릭됐을 때, 특정 함수를 실행하도록 할 수 있다.
+
+단 `onClick={함수명()}`과 같이 사용하게 되면, 클릭될 때, 함수가 실행되는 것이 아닌 객체가 생성될 때 실행됨을 명심하자.
+
+
+만약 이벤트가 발생했을 때, 특정한 값을 매개변수로 전달받아 사용할 수 있다. 이 때 사용할 수 있는 것이 익명함수를 이용하는 것이다.
+
+```
+<TabButton onSelect={() => handleSelect('Components')}>Components</TabButton>
+```
+
+위 함수는 onSelect 내부에서 익몀 함수를 전달하며, 익명함수 내부에는 매개변수를 전달 받는 함수를 사용하고 있다. 단 이 때, 컴포넌트에 전달하는 것은 익명 함수이기 때문에, 이벤트가 발생할 때 익명함수가 실행되며 내부 함수가 실행되게 된다.
+
+
+## UI를 업데이트 하는 방법 State 및 React Hook
+
+리액트는 일반 변수를 변경하는 것으론, 화면을 다시 그리지 않는다.
+
+이 때, 변화를 감지하고 화면을 다시 그리기 위해 사용되는 것이 바로 `상태` 즉 `State`이다.
+
+상태를 변경하는 것은 `useState` 함수를 이용하여 호출된다.
+
+`useState`는 `React Hook`이라는 리액트에서 선언된 특수한 함수 중 하나이며, 이러한 `Hook`은 컴포넌트 내부에서만 사용이 가능하다. 
+
+즉 컴포넌트 내부 함수에선 이러한 `hook`을 사용하는 것은 허용되지 않는다.
+
+`const [ 변수명, 함수명 ] = useState(초기값);`으로 useState를 선언할 수 있으며, 선언한 함수명으로 변수의 값을 조작할 수 있다.
+
+변수 값이 변경되면 화면은 다시 그려지며, 다시 그려질 때, 업데이트 된 값을 사용할 수 있다.
+
+#### 즉 useState를 실행한 바로는 업데이트된 값을 사용할 수 없다.
